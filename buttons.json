@@ -1,0 +1,80 @@
+{
+    "intents": [
+       {
+          "tag": "select_mobile_brand",
+          "patterns": [
+             "I want to buy a new phone",
+             "Show me mobile brands",
+             "I need a new mobile",
+             "Which mobile brands do you have?"
+          ],
+          "responses": [
+             {
+                "text": "Please select your mobile brand:",
+                "buttons": [
+                   { "title": "iPhone", "payload": "iPhone" },
+                   { "title": "Samsung", "payload": "Samsung" }
+                ]
+             }
+          ],
+          "context_set": ["select_mobile_brand_context"]
+       },
+       {
+          "tag": "select_samsung_model",
+          "patterns": [
+             "Samsung"
+          ],
+          "responses": [
+             {
+                "text": "Please select your Samsung model:",
+                "buttons": [
+                   { "title": "Galaxy S21", "payload": "Galaxy S21" },
+                   { "title": "Galaxy Note 20", "payload": "Galaxy Note 20" }
+                ]
+             }
+          ],
+          "context_filter": ["select_mobile_brand_context"],
+          "context_set": ["select_samsung_model_context"]
+       },
+       {
+          "tag": "select_iphone_model",
+          "patterns": [
+             "iPhone"
+          ],
+          "responses": [
+             {
+                "text": "Please select your iPhone model:",
+                "buttons": [
+                   { "title": "iPhone 13", "payload": "iPhone 13" },
+                   { "title": "iPhone 12", "payload": "iPhone 12" }
+                ]
+             }
+          ],
+          "context_filter": ["select_mobile_brand_context"],
+          "context_set": ["select_iphone_model_context"]
+       },
+       {
+          "tag": "iphone_model_selected",
+          "patterns": [
+             "iPhone 13",
+             "iPhone 12"
+          ],
+          "responses": [
+             "Great choice! You selected the {model}. How can I assist you further with this product?"
+          ],
+          "context_filter": ["select_iphone_model_context"]
+       },
+       {
+          "tag": "samsung_model_selected",
+          "patterns": [
+             "Galaxy S21",
+             "Galaxy Note 20"
+          ],
+          "responses": [
+             "Great choice! You selected the {model}. How can I assist you further with this product?"
+          ],
+          "context_filter": ["select_samsung_model_context"]
+       }
+    ]
+ }
+ 
