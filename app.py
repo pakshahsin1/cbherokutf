@@ -3,19 +3,20 @@ import nltk
 from nltk.data import find
 from nltk import download
 
-# List of required NLTK packages
-nltk_packages = ['punkt', 'wordnet', 'omw-1.4']
-
 # Function to check and download NLTK data
-def download_nltk_packages(packages):
-    for package in packages:
-        try:
-            find(f'tokenizers/{package}')
-        except LookupError:
-            download(package)
+def download_nltk_packages(file_path):
+    with open(file_path, 'r') as file:
+        packages = file.read().splitlines()
+        for package in packages:
+            package = package.strip()
+            try:
+                find(f'tokenizers/{package}')
+            except LookupError:
+                download(package)
 
 # Download NLTK packages
-download_nltk_packages(nltk_packages)
+nltk_data_file = 'nltk.txt'
+download_nltk_packages(nltk_data_file)
 
 import json
 import pickle
