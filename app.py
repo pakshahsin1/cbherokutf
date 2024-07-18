@@ -1,8 +1,21 @@
 import os
 import nltk
-nltk.download('punkt')
-nltk.download('wordnet')
-nltk.download('omw-1.4')
+from nltk.data import find
+from nltk import download
+
+# List of required NLTK packages
+nltk_packages = ['punkt', 'wordnet', 'omw-1.4']
+
+# Function to check and download NLTK data
+def download_nltk_packages(packages):
+    for package in packages:
+        try:
+            find(f'tokenizers/{package}')
+        except LookupError:
+            download(package)
+
+# Download NLTK packages
+download_nltk_packages(nltk_packages)
 
 import json
 import pickle
@@ -15,7 +28,7 @@ import tflite_runtime.interpreter as tflite
 interpreter = tflite.Interpreter(model_path='chatbot_model.tflite')
 interpreter.allocate_tensors()
 
-# Get input and output tensors.
+# Get input and output tensors
 input_details = interpreter.get_input_details()
 output_details = interpreter.get_output_details()
 
