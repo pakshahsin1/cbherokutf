@@ -1,7 +1,5 @@
 import os
 import nltk
-from nltk.data import find
-from nltk import download
 
 # Function to check and download NLTK data
 def download_nltk_packages(file_path):
@@ -9,10 +7,7 @@ def download_nltk_packages(file_path):
         packages = file.read().splitlines()
         for package in packages:
             package = package.strip()
-            try:
-                find(f'tokenizers/{package}')
-            except LookupError:
-                download(package)
+            nltk.download(package)
 
 # Download NLTK packages
 nltk_data_file = 'nltk.txt'
