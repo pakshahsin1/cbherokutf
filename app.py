@@ -1,5 +1,37 @@
 import os
+import requests
+
+# Function to download a file from a URL
+def download_file(url, dest_path):
+    response = requests.get(url, stream=True)
+    response.raise_for_status()
+    with open(dest_path, 'wb') as file:
+        for chunk in response.iter_content(chunk_size=8192):
+            file.write(chunk)
+
+# URLs of your large files
+model_url = 'https://your-storage-service.com/chatbot_model.h5'
+words_url = 'https://your-storage-service.com/words.pkl'
+classes_url = 'https://your-storage-service.com/classes.pkl'
+buttons_url = 'https://your-storage-service.com/buttons.json'
+
+# Download files if they don't exist
+if not os.path.exists('chatbot_model.h5'):
+    download_file(model_url, 'chatbot_model.h5')
+if not os.path.exists('words.pkl'):
+    download_file(words_url, 'words.pkl')
+if not os.path.exists('classes.pkl'):
+    download_file(classes_url, 'classes.pkl')
+if not os.path.exists('buttons.json'):
+    download_file(buttons_url, 'buttons.json')
+
 import nltk
+nltk.download('punkt')
+nltk.download('wordnet')
+nltk.download('omw-1.4')
+
+# The rest of your code...
+
 
 
 # Set the NLTK data path
