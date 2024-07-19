@@ -1,6 +1,12 @@
 import os
 import nltk
 
+
+# Set the NLTK data path
+nltk.data.path.append(os.path.join(os.path.dirname(__file__), 'nltk_data'))
+
+# The rest of your code...
+
 # Function to check and download NLTK data
 def download_nltk_packages(file_path):
     with open(file_path, 'r') as file:
