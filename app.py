@@ -1,10 +1,31 @@
-from flask import Flask, request, jsonify
 import os
 import requests
+import json
+import pickle
+import numpy as np
+import random
+from flask import Flask, request, jsonify
+from nltk.stem import WordNetLemmatizer
+import tflite_runtime.interpreter as tflite
 
 app = Flask(__name__)
 
-# Function to download a file from a URL
+@app.route('/', methods=['GET'])
+def index():
+    return "Chatbot API is running"
+
+@app.route('/chat', methods=['POST'])
+def chat():
+    data = request.json
+    user_message = data.get('message')
+    response = chatbot_response(user_message)
+    return jsonify({'response': response})
+
+if __name__ == "__main__":
+    app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))
+
+# Your existing chatbot code...
+
 def download_file(url, dest_path):
     response = requests.get(url, stream=True)
     response.raise_for_status()
@@ -12,13 +33,11 @@ def download_file(url, dest_path):
         for chunk in response.iter_content(chunk_size=8192):
             file.write(chunk)
 
-# URLs of your large files
-model_url = 'https://your-storage-service.com/chatbot_model.h5'
-words_url = 'https://your-storage-service.com/words.pkl'
-classes_url = 'https://your-storage-service.com/classes.pkl'
-buttons_url = 'https://your-storage-service.com/buttons.json'
+model_url = 'https://drive.google.com/file/d/1-5hFH-yyrgvKedGiIrheze4Mm-htUlUr' # h5
+words_url = 'https://drive.google.com/file/d/1JxNE-vLJEHXuTGykz4GfiS_BCoxJdR8_/view?usp=sharing'  #word.pkl
+classes_url = 'drive.google.com/file/d/1zy-1Dhu75hsqUBZ0ahCq1WwHEj6Ximdf'  # Classes.pkl
+buttons_url = 'https://drive.google.com/file/d/1xcJl9LwuPtC8mOXecUyEOJlxv2hK6iC3/view?usp=sharing'  # buttons.json
 
-# Download files if they don't exist
 if not os.path.exists('chatbot_model.h5'):
     download_file(model_url, 'chatbot_model.h5')
 if not os.path.exists('words.pkl'):
@@ -28,21 +47,12 @@ if not os.path.exists('classes.pkl'):
 if not os.path.exists('buttons.json'):
     download_file(buttons_url, 'buttons.json')
 
-import nltk
 nltk.download('punkt')
 nltk.download('wordnet')
 nltk.download('omw-1.4')
 
-# The rest of your code...
-
-
-
-# Set the NLTK data path
 nltk.data.path.append(os.path.join(os.path.dirname(__file__), 'nltk_data'))
 
-# The rest of your code...
-
-# Function to check and download NLTK data
 def download_nltk_packages(file_path):
     with open(file_path, 'r') as file:
         packages = file.read().splitlines()
@@ -50,26 +60,15 @@ def download_nltk_packages(file_path):
             package = package.strip()
             nltk.download(package)
 
-# Download NLTK packages
 nltk_data_file = 'nltk.txt'
 download_nltk_packages(nltk_data_file)
 
-import json
-import pickle
-import numpy as np
-import random
-from nltk.stem import WordNetLemmatizer
-import tflite_runtime.interpreter as tflite
-
-# Load the TensorFlow Lite model
 interpreter = tflite.Interpreter(model_path='chatbot_model.tflite')
 interpreter.allocate_tensors()
 
-# Get input and output tensors
 input_details = interpreter.get_input_details()
 output_details = interpreter.get_output_details()
 
-# Load data
 intents = json.loads(open('buttons.json').read())
 words = pickle.load(open('words.pkl', 'rb'))
 classes = pickle.load(open('classes.pkl', 'rb'))
@@ -130,17 +129,3 @@ while start:
     except Exception as e:
         print('You may need to rephrase your question.')
         print(f"Error: {e}")
-
-@app.route('/', methods=['GET'])
-def index():
-    return "Chatbot API is running"
-
-@app.route('/chat', methods=['POST'])
-def chat():
-    data = request.json
-    user_message = data.get('message')
-    response = chatbot_response(user_message)
-    return jsonify({'response': response})
-
-if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))
