@@ -1,5 +1,8 @@
+from flask import Flask, request, jsonify
 import os
 import requests
+
+app = Flask(__name__)
 
 # Function to download a file from a URL
 def download_file(url, dest_path):
@@ -127,3 +130,17 @@ while start:
     except Exception as e:
         print('You may need to rephrase your question.')
         print(f"Error: {e}")
+
+@app.route('/', methods=['GET'])
+def index():
+    return "Chatbot API is running"
+
+@app.route('/chat', methods=['POST'])
+def chat():
+    data = request.json
+    user_message = data.get('message')
+    response = chatbot_response(user_message)
+    return jsonify({'response': response})
+
+if __name__ == "__main__":
+    app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))
