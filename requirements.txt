@@ -2,7 +2,8 @@ Flask
 flask-cors
 gunicorn
 nltk
-numpy>=1.25.2
+pybind11>=2.12
+numpy>=2.0
 tflite-runtime
 requests
 
