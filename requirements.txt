@@ -2,7 +2,7 @@ Flask
 flask-cors
 gunicorn
 nltk
-numpy==1.21.0
+numpy>=1.23.2
 tflite-runtime
 requests
 
