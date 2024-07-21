@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 from flask_cors import CORS
 import os
 import json
@@ -74,6 +74,11 @@ def chat():
     user_message = data.get('message')
     response = chatbot_response(user_message)
     return jsonify({'response': response})
+
+@app.route("/")
+def home():
+    # return "<p>Hello, World!</p>"
+    return render_template('index.html')
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))
