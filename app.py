@@ -14,7 +14,8 @@ app = Flask(__name__)
 CORS(app)
 
 # Initialize the model and other necessary components
-interpreter = tflite.Interpreter(model_path='chatbot_model.tflite')
+model_path = 'chatbot_model.tflite'
+interpreter = tflite.Interpreter(model_path=model_path)
 interpreter.allocate_tensors()
 
 input_details = interpreter.get_input_details()
@@ -77,6 +78,5 @@ def chat():
 
 @app.route("/")
 def home():
-    # return "<p>Hello, World!</p>"
     return render_template('index.html')
 
