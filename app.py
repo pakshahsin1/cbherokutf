@@ -6,7 +6,7 @@ import pickle
 import numpy as np
 import random
 from nltk.stem import WordNetLemmatizer
-import tflite_runtime.interpreter as tflite
+# import tflite_runtime.interpreter as tflite
 
 app = Flask(__name__)
 
@@ -14,7 +14,9 @@ app = Flask(__name__)
 CORS(app)
 
 # Initialize the model and other necessary components
-interpreter = tflite.Interpreter(model_path='./chatbot_model.tflite')
+# interpreter = tflite.Interpreter(model_path='./chatbot_model.tflite')
+from tflite_runtime.interpreter import Interpreter
+interpreter = Interpreter(model_path="chatbot_model.tflite")
 interpreter.allocate_tensors()
 
 input_details = interpreter.get_input_details()
