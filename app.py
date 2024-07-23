@@ -14,9 +14,11 @@ app = Flask(__name__)
 CORS(app)
 
 # Initialize the model and other necessary components
-# interpreter = tflite.Interpreter(model_path='./chatbot_model.tflite')
-from tflite_runtime.interpreter import Interpreter
-interpreter = Interpreter(model_path="chatbot_model.tflite")
+dir_name = os.path.dirname(os.path.realpath(__file__))
+model_path = os.path.join(dir_name, 'chatbot_model.tflite')
+
+# Initialize the model and other necessary components
+interpreter = tflite.Interpreter(model_path=model_path)
 interpreter.allocate_tensors()
 
 input_details = interpreter.get_input_details()
